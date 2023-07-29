@@ -1,22 +1,23 @@
 import axios from 'axios';
-import {useEffect} from 'react';
-import {usePokedex} from '../context/context';
+import {useEffect, useState} from 'react';
 const instance = axios.create({
   baseURL: 'https://pokeapi.co/api/v2/',
 });
 
 /** get pokemons custom hook */
-export const useFetch = () => {
-  const {dispatch} = usePokedex();
+export const useFetch = (endpoint: string) => {
+  const [data, setData] = useState();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await instance.get('pokemon?limit=151');
-        dispatch({type: 'ADD_POKEMONS', payload: response.data.results});
+        const response = await instance.get(endpoint);
+        setData(response.data);
       } catch (error) {
         throw new Error('Error when consulting list of pokemons!');
       }
     };
     fetchData();
-  }, [dispatch]);
+  }, [endpoint]);
+
+  return data;
 };

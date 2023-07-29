@@ -1,5 +1,8 @@
 import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {PokemonList} from '../components/PokemonList';
+import { useFetch } from '../hooks/hooks';
+import { usePokedex } from '../context/context';
+import { useEffect } from 'react';
 
 export type DataT = {
   name: string;
@@ -26,10 +29,18 @@ const pokemonsList: DataT[] = [
 ];
 
 export const HomeScreen = () => {
+  const {state, dispatch} = usePokedex();
+  const data = useFetch('pokemon?limit=151');
+  
+  useEffect(() => {
+    if (data) {
+        dispatch({type: 'ADD_POKEMONS', payload: data.results});
+    }
+  }, [data, dispatch]);
   return (
     <>
       <SafeAreaView>
-        <PokemonList data={pokemonsList} />
+        <PokemonList data={state.Pokemons} />
       </SafeAreaView>
     </>
   );

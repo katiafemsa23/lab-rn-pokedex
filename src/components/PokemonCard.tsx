@@ -24,7 +24,6 @@ export const PokemonCard = (props: PropsT) => {
   const [image, setImage] = useState('');
   const [detailedInformation, setDetailedInformation] =
     useState<PokemonT | null>();
-  console.log(detailedInformation);
 
   useEffect(() => {
     fetch(pokemon.url)
